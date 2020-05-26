@@ -1,5 +1,7 @@
 # ❱ Plex Assistant
 
+### :star: :exclamation: Forked to make additions to support music playback.
+
 [Installation](#installation) ｜ [Configuration](#configuration) ｜ [IFTTT/DialogFlow Setup](#iftttdialogflow-setup) ｜ [Commands](#commands) ｜ [Help Translate](#translation)<br><hr>
 
 Plex Assistant is a Home Assistant component to allow Google Assistant to cast Plex media to Google cast and Plex devices with a bit of help from [IFTTT or DialogFlow](#iftttdialogflow-setup).
