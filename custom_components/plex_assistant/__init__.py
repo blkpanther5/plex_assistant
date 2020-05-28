@@ -50,7 +50,7 @@ def setup(hass, config):
     from pychromecast.controllers.plex import PlexController
 
     from .helpers import (cc_callback, find_media, fuzzy, get_libraries,
-                          media_error, play_media, video_selection)
+                          media_error, play_media, media_selection)
     from .localize import LOCALIZE
     from .process_speech import process_speech
 
@@ -72,7 +72,7 @@ def setup(hass, config):
 
     PA.server = PlexServer(base_url, token)
     PA.plex = PA.server.library
-    PA.lib = get_libraries(PA.plex)
+    PA.lib = get_libraries(PA.plex, _LOGGER)
     PA.alias_names = list(aliases.keys()) if aliases else []
     PA.client_names = [client.title for client in PA.server.clients()]
     get_chromecasts(blocking=False, callback=cc_callback)
@@ -96,7 +96,8 @@ def setup(hass, config):
             call.data.get("command").lower(),
             localize,
             default_cast,
-            PA
+            PA,
+            _LOGGER
         )
 
         if not command["control"]:
@@ -142,7 +143,7 @@ def setup(hass, config):
 
         try:
             result = find_media(command, command["media"], PA.lib)
-            media = video_selection(command, result["media"],
+            media = media_selection(command, result["media"],
                                     result["library"])
         except Exception:
             error = media_error(command, localize)

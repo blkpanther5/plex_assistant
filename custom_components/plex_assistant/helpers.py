@@ -5,6 +5,8 @@ from datetime import datetime
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process as fw
 
+import plexapi
+
 from . import PA
 
 
@@ -17,13 +19,14 @@ def cc_callback(chromecast):
         PA.devices[chromecast.device.friendly_name] = chromecast
 
 
-def get_libraries(plex):
+def get_libraries(plex, logger=None):
     """ Return Plex libraries, their contents, media titles, & time updated """
     plex.reload()
     movies = plex.search(libtype="movie")
     movies.sort(key=lambda x: x.addedAt)
     shows = plex.search(libtype="show")
     shows.sort(key=lambda x: x.updatedAt or x.addedAt)
+    tracks = plex.search(libtype="track")
 
     return {
         "movies": movies,
@@ -31,6 +34,8 @@ def get_libraries(plex):
         "shows": shows,
         "show_titles": [show.title for show in shows],
         "updated": datetime.now(),
+        "tracks": tracks,
+        "track_titles": [track.title for track in tracks],
     }
 
 
@@ -39,7 +44,7 @@ def fuzzy(media, lib, scorer=fuzz.QRatio):
     return fw.extractOne(media, lib, scorer=scorer)
 
 
-def video_selection(option, media, lib):
+def media_selection(option, media, lib):
     """ Return media item.
     Narrow it down if season, episode, unwatched, or latest is used
     """
@@ -111,8 +116,10 @@ def find_media(selected, media, lib):
     if selected["library"]:
         if selected["library"][0].type == 'show':
             section = "show_titles"
-        else:
+        elif selected["library"][0].type == 'movie':
             section = "movie_titles"
+        else:
+            section = "track_titles"
 
         if not media:
             result = ""
@@ -256,6 +263,10 @@ def get_library(phrase, lib, localize):
         return lib["shows"]
     elif any(word in phrase for word in localize["movies"]):
         return lib["movies"]
+    elif any(word in phrase for word in localize["tracks"]):
+        return lib["tracks"]
+    else:
+        return lib["tracks"]
     return None
 
 

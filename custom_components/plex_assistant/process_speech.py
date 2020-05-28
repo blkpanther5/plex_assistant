@@ -2,7 +2,7 @@ from .helpers import (_find, _remove, get_library, get_media_and_device,
                       get_season_episode_num, fuzzy)
 
 
-def process_speech(command, localize, default_cast, PA):
+def process_speech(command, localize, default_cast, PA, logger=None):
     """ Find and return all options found in the command string """
     lib = PA.lib
     latest = False
@@ -34,6 +34,10 @@ def process_speech(command, localize, default_cast, PA):
         }
 
     library = get_library(command, lib, localize)
+
+    ### Additional Debug:
+    #if logger != None:
+    #    logger.debug("Library Selected: " + str(library))
 
     for start in localize["play_start"]:
         if command.startswith(start):

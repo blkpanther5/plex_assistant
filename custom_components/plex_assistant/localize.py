@@ -11,6 +11,12 @@ LOCALIZE = {
             "tv",
             "show"
         ],
+        "tracks": [
+            "track",
+            "song",
+            "album",
+            "record"
+        ],
 
         # Controls
         "controls": {
@@ -19,6 +25,8 @@ LOCALIZE = {
             "stop": "stop",
             "jump_forward": "jump forward",
             "jump_back": "jump back",
+            "next": "next",
+            "previous": "previous",
         },
 
         # Text for errors
@@ -37,6 +45,7 @@ LOCALIZE = {
             "play show",
             "play the",
             "play",
+            "shuffle"
         ],
 
         # Ordinal Numbers to Integers
